@@ -1,13 +1,18 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
+import os
 
-# List of files to visualize
-files = ['baseline.csv', 'baseline_test.csv', 'circle_z.csv', 'circle_z_test.csv']
+# Directory containing CSV files
+data_dir = 'raw_data'
+
+# Get list of all .csv files in the raw_data directory
+files = [f for f in os.listdir(data_dir) if f.endswith('.csv')]
 
 for filename in files:
-    label = filename.replace('.csv', '')
-    df = pd.read_csv(f'raw_data/{filename}')
+    # Use filename without .csv as the label
+    label = os.path.splitext(filename)[0]
+    df = pd.read_csv(os.path.join(data_dir, filename))
 
     # Convert timestamp strings to datetime
     df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True, errors='coerce')
@@ -26,7 +31,7 @@ for filename in files:
     ax[0].plot(df['time_sec'], df['accel_y'], label='accel_y')
     ax[0].plot(df['time_sec'], df['accel_z'], label='accel_z')
     ax[0].set_ylabel('Acceleration')
-    ax[0].set_title(f'Accelerometer + Gyroscope for {label}')
+    ax[0].set_title(label)
     ax[0].legend()
     ax[0].grid(True)
 

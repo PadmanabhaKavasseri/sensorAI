@@ -6,7 +6,7 @@ import os
 
 # ---------- 1. Load your PyTorch model ----------
 # Make sure this matches the architecture used when training
-from model import CNNLSTMModel  # Replace with actual model class
+from lstmcnn_model import CNNLSTMModel  # Replace with actual model class
 
 model = CNNLSTMModel()
 model.load_state_dict(torch.load("gesture_model.pth", map_location=torch.device('cpu')))

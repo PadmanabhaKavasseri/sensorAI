@@ -1,10 +1,11 @@
 import torch
-from model import CNNLSTMModel  # Replace with your model file
+from enhanced_model import EnhancedGestureCNN
+  # Replace with your model file
 import qai_hub as hub
 
 # Load trained PyTorch model
-model = CNNLSTMModel()
-model.load_state_dict(torch.load("gesture_model.pth", map_location=torch.device("cpu")))
+model = EnhancedGestureCNN()
+model.load_state_dict(torch.load("enhanced_cnn_gesture_model.pth", map_location=torch.device("cpu")))
 model.eval()
 
 # Trace or script the model with example input
