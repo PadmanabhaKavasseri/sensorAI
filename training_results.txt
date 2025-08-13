@@ -1,0 +1,171 @@
+☺  python3 main.py                                                       main ✔
+Training data shape: (3932, 200, 6)
+Test data shape: (78, 200, 6)
+Class distribution in training data:
+  circle: 3812 samples
+  misc: 120 samples
+Final training data shape: (3932, 200, 6)
+Final test data shape: (78, 200, 6)
+Number of classes: 2
+Classes: ['circle' 'misc']
+Using device: cpu
+
+Training Enhanced CNN...
+============================================================
+/Users/padmanabha/Projects/sensor_ai/venv/lib/python3.11/site-packages/torch/optim/lr_scheduler.py:28: UserWarning: The verbose parameter is deprecated. Please use get_last_lr() to access the learning rate.
+  warnings.warn("The verbose parameter is deprecated. Please use get_last_lr() "
+Epoch 1/30
+Train Loss: 0.5514, Train Acc: 69.63%
+Test Loss: 0.8291, Test Acc: 58.97%
+Best Test Acc: 58.97%
+--------------------------------------------------
+Epoch 6/30
+Train Loss: 0.1622, Train Acc: 94.74%
+Test Loss: 0.1007, Test Acc: 94.87%
+Best Test Acc: 94.87%
+--------------------------------------------------
+Epoch 11/30
+Train Loss: 0.1275, Train Acc: 96.11%
+Test Loss: 0.3585, Test Acc: 89.74%
+Best Test Acc: 94.87%
+--------------------------------------------------
+Epoch 16/30
+Train Loss: 0.0841, Train Acc: 97.51%
+Test Loss: 0.1082, Test Acc: 94.87%
+Best Test Acc: 98.72%
+--------------------------------------------------
+Epoch 21/30
+Train Loss: 0.0743, Train Acc: 97.81%
+Test Loss: 0.4929, Test Acc: 91.03%
+Best Test Acc: 98.72%
+--------------------------------------------------
+Epoch 26/30
+Train Loss: 0.0574, Train Acc: 98.35%
+Test Loss: 0.1039, Test Acc: 98.72%
+Best Test Acc: 98.72%
+--------------------------------------------------
+
+Detailed Evaluation:
+==================================================
+              precision    recall  f1-score   support
+
+      circle       0.98      1.00      0.99        55
+        misc       1.00      0.96      0.98        23
+
+    accuracy                           0.99        78
+   macro avg       0.99      0.98      0.98        78
+weighted avg       0.99      0.99      0.99        78
+
+
+Confusion Matrix:
+[[55  0]
+ [ 1 22]]
+
+Training Improved CNN...
+============================================================
+/Users/padmanabha/Projects/sensor_ai/venv/lib/python3.11/site-packages/torch/optim/lr_scheduler.py:28: UserWarning: The verbose parameter is deprecated. Please use get_last_lr() to access the learning rate.
+  warnings.warn("The verbose parameter is deprecated. Please use get_last_lr() "
+Epoch 1/30
+Train Loss: 0.5496, Train Acc: 72.51%
+Test Loss: 0.4279, Test Acc: 83.33%
+Best Test Acc: 83.33%
+--------------------------------------------------
+Epoch 6/30
+Train Loss: 0.2565, Train Acc: 90.41%
+Test Loss: 0.3092, Test Acc: 85.90%
+Best Test Acc: 88.46%
+--------------------------------------------------
+Epoch 11/30
+Train Loss: 0.1974, Train Acc: 93.36%
+Test Loss: 0.3872, Test Acc: 83.33%
+Best Test Acc: 91.03%
+--------------------------------------------------
+Epoch 16/30
+Train Loss: 0.1557, Train Acc: 94.71%
+Test Loss: 0.2478, Test Acc: 94.87%
+Best Test Acc: 94.87%
+--------------------------------------------------
+Epoch 21/30
+Train Loss: 0.1335, Train Acc: 95.80%
+Test Loss: 0.2845, Test Acc: 92.31%
+Best Test Acc: 94.87%
+--------------------------------------------------
+Epoch 26/30
+Train Loss: 0.1259, Train Acc: 96.29%
+Test Loss: 0.2082, Test Acc: 96.15%
+Best Test Acc: 97.44%
+--------------------------------------------------
+
+Detailed Evaluation:
+==================================================
+              precision    recall  f1-score   support
+
+      circle       0.98      0.98      0.98        55
+        misc       0.96      0.96      0.96        23
+
+    accuracy                           0.97        78
+   macro avg       0.97      0.97      0.97        78
+weighted avg       0.97      0.97      0.97        78
+
+
+Confusion Matrix:
+[[54  1]
+ [ 1 22]]
+
+Training LSTM...
+============================================================
+/Users/padmanabha/Projects/sensor_ai/venv/lib/python3.11/site-packages/torch/optim/lr_scheduler.py:28: UserWarning: The verbose parameter is deprecated. Please use get_last_lr() to access the learning rate.
+  warnings.warn("The verbose parameter is deprecated. Please use get_last_lr() "
+Epoch 1/30
+Train Loss: 0.5282, Train Acc: 72.61%
+Test Loss: 0.5406, Test Acc: 71.79%
+Best Test Acc: 71.79%
+--------------------------------------------------
+Epoch 6/30
+Train Loss: 0.1899, Train Acc: 93.87%
+Test Loss: 0.1716, Test Acc: 92.31%
+Best Test Acc: 92.31%
+--------------------------------------------------
+Epoch 11/30
+Train Loss: 0.1837, Train Acc: 94.30%
+Test Loss: 0.2706, Test Acc: 91.03%
+Best Test Acc: 96.15%
+--------------------------------------------------
+Epoch 16/30
+Train Loss: 0.1241, Train Acc: 96.29%
+Test Loss: 0.2009, Test Acc: 94.87%
+Best Test Acc: 97.44%
+--------------------------------------------------
+Epoch 21/30
+Train Loss: 0.0815, Train Acc: 97.69%
+Test Loss: 0.1163, Test Acc: 94.87%
+Best Test Acc: 97.44%
+--------------------------------------------------
+Epoch 26/30
+Train Loss: 0.0461, Train Acc: 98.68%
+Test Loss: 0.2101, Test Acc: 94.87%
+Best Test Acc: 97.44%
+--------------------------------------------------
+
+Detailed Evaluation:
+==================================================
+              precision    recall  f1-score   support
+
+      circle       1.00      0.96      0.98        55
+        misc       0.92      1.00      0.96        23
+
+    accuracy                           0.97        78
+   macro avg       0.96      0.98      0.97        78
+weighted avg       0.98      0.97      0.97        78
+
+
+Confusion Matrix:
+[[53  2]
+ [ 0 23]]
+
+============================================================
+MODEL COMPARISON:
+============================================================
+Enhanced CNN: 98.72%
+Improved CNN: 97.44%
+LSTM: 97.44%
