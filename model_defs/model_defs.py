@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class EnhancedGestureCNN(nn.Module):
+class GestureRecCNN_V3(nn.Module):
     def __init__(self, input_size=6, num_classes=2, dropout_rate=0.3):
         super().__init__()
         
@@ -85,51 +85,7 @@ class EnhancedGestureCNN(nn.Module):
         out = self.classifier(x)
         return out
 
-# Alternative: LSTM-based model for comparison
-class LSTMGestureModel(nn.Module):
-    def __init__(self, input_size=6, hidden_size=128, num_layers=2, num_classes=2, dropout_rate=0.3):
-        super().__init__()
-        
-        self.lstm = nn.LSTM(
-            input_size=input_size,
-            hidden_size=hidden_size,
-            num_layers=num_layers,
-            batch_first=True,
-            dropout=dropout_rate if num_layers > 1 else 0,
-            bidirectional=True
-        )
-        
-        # Attention mechanism
-        self.attention = nn.Sequential(
-            nn.Linear(hidden_size * 2, hidden_size),
-            nn.Tanh(),
-            nn.Linear(hidden_size, 1)
-        )
-        
-        self.classifier = nn.Sequential(
-            nn.Linear(hidden_size * 2, hidden_size),
-            nn.ReLU(),
-            nn.Dropout(dropout_rate),
-            nn.Linear(hidden_size, num_classes)
-        )
-        
-    def forward(self, x):
-        # LSTM forward pass
-        lstm_out, _ = self.lstm(x)  # (batch, seq_len, hidden_size*2)
-        
-        # Attention mechanism
-        attention_scores = self.attention(lstm_out)  # (batch, seq_len, 1)
-        attention_weights = F.softmax(attention_scores, dim=1)
-        
-        # Weighted sum
-        context = torch.sum(lstm_out * attention_weights, dim=1)  # (batch, hidden_size*2)
-        
-        # Classification
-        out = self.classifier(context)
-        return out
-
-# Your original model with improvements
-class ImprovedCNNModel(nn.Module):
+class GestureRecCNN_V2(nn.Module):
     def __init__(self, input_size=6, num_classes=2, dropout_rate=0.2):
         super().__init__()
         
@@ -178,3 +134,102 @@ class ImprovedCNNModel(nn.Module):
         x = x.squeeze(-1)  # (batch, 256)
         out = self.classifier(x)
         return out
+
+class GestureRecCNN_V1(nn.Module):
+    def __init__(self, input_size=6, num_classes=2):
+        super().__init__()
+        
+        self.cnn = nn.Sequential(
+            nn.Conv1d(in_channels=input_size, out_channels=32, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool1d(kernel_size=2), # Reduces seq_len by 2
+            nn.Conv1d(32, 64, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool1d(kernel_size=2), # Reduces seq_len by 2
+            nn.Conv1d(64, 128, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.AdaptiveAvgPool1d(1), # Reduces to (batch, 128, 1)
+        )
+        
+        self.classifier = nn.Sequential(
+            nn.Linear(128, 64),
+            nn.ReLU(),
+            nn.Linear(64, num_classes)
+        )
+    
+    def forward(self, x):
+        x = x.permute(0, 2, 1) # (batch, seq_len, features) → (batch, features, seq_len)
+        x = self.cnn(x) # (batch, 128, 1)
+        x = x.squeeze(-1) # (batch, 128)
+        out = self.classifier(x)
+        return out
+
+class LSTMGestureModel(nn.Module):
+    def __init__(self, input_size=6, hidden_size=128, num_layers=2, num_classes=2, dropout_rate=0.3):
+        super().__init__()
+        
+        self.lstm = nn.LSTM(
+            input_size=input_size,
+            hidden_size=hidden_size,
+            num_layers=num_layers,
+            batch_first=True,
+            dropout=dropout_rate if num_layers > 1 else 0,
+            bidirectional=True
+        )
+        
+        # Attention mechanism
+        self.attention = nn.Sequential(
+            nn.Linear(hidden_size * 2, hidden_size),
+            nn.Tanh(),
+            nn.Linear(hidden_size, 1)
+        )
+        
+        self.classifier = nn.Sequential(
+            nn.Linear(hidden_size * 2, hidden_size),
+            nn.ReLU(),
+            nn.Dropout(dropout_rate),
+            nn.Linear(hidden_size, num_classes)
+        )
+        
+    def forward(self, x):
+        # LSTM forward pass
+        lstm_out, _ = self.lstm(x)  # (batch, seq_len, hidden_size*2)
+        
+        # Attention mechanism
+        attention_scores = self.attention(lstm_out)  # (batch, seq_len, 1)
+        attention_weights = F.softmax(attention_scores, dim=1)
+        
+        # Weighted sum
+        context = torch.sum(lstm_out * attention_weights, dim=1)  # (batch, hidden_size*2)
+        
+        # Classification
+        out = self.classifier(context)
+        return out
+
+class CNNLSTMModel(nn.Module):
+    def __init__(self, input_size=6, num_classes=2):  # Adjust num_classes as needed
+        super().__init__()
+        self.cnn = nn.Sequential(
+            nn.Conv1d(in_channels=input_size, out_channels=32, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool1d(kernel_size=2),
+            nn.Conv1d(32, 64, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool1d(kernel_size=2),
+        )
+        self.lstm = nn.LSTM(input_size=64, hidden_size=128, batch_first=True)
+        self.classifier = nn.Sequential(
+            nn.Linear(128, 64),
+            nn.ReLU(),
+            nn.Linear(64, num_classes)
+        )
+
+    def forward(self, x):
+        # x: (batch, seq_len, features) → (batch, features, seq_len)
+        x = x.permute(0, 2, 1)
+        x = self.cnn(x)  # (batch, channels, new_seq_len)
+        x = x.permute(0, 2, 1)  # back to (batch, seq_len, channels)
+        output, (h_n, c_n) = self.lstm(x)
+        out = self.classifier(h_n[-1])
+        return out
+

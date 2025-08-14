@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))  # adds sensor_ai root
 
-from model_defs.enhanced_model import EnhancedGestureCNN
+from model_defs.model_defs import EnhancedGestureCNN
 import config
   # Replace with your model file
 import qai_hub as hub

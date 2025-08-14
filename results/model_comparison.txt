@@ -1,0 +1,18 @@
+MODEL COMPARISON RESULTS
+==================================================
+
+GestureRecCNN_V3: 97.44%
+  Model path: results/models/best_gesturereccnn_v3_model.pth
+
+GestureRecCNN_V2: 96.15%
+  Model path: results/models/best_gesturereccnn_v2_model.pth
+
+GestureRecCNN_V1: 96.15%
+  Model path: results/models/best_gesturereccnn_v1_model.pth
+
+LSTM: 97.44%
+  Model path: results/models/best_lstm_model.pth
+
+CNN-LSTM: 92.31%
+  Model path: results/models/best_cnn_lstm_model.pth
+

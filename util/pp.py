@@ -1,9 +1,14 @@
 import os
+import sys
+from pathlib import Path
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 
-DATA_DIR = "sensor_data"
+# Adds ~/Projects/sensor_ai
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+import config
+
 SAMPLE_RATE = 50  # Hz
 WINDOW_SIZE_SECONDS = 4
 STRIDE_SECONDS = 1
@@ -44,7 +49,7 @@ def load_and_preprocess():
     X_train, y_train = [], []
     X_test, y_test = [], []
     
-    files = [f for f in os.listdir(DATA_DIR) if f.endswith('.csv')]
+    files = [f for f in os.listdir(config.DATA_DIR) if f.endswith('.csv')]
     
     for filename in files:
         # Extract label: files starting with 'circle' -> 'circle', everything else -> 'misc'
@@ -54,7 +59,7 @@ def load_and_preprocess():
         else:
             base_label = 'misc'
         
-        df = pd.read_csv(os.path.join(DATA_DIR, filename))
+        df = pd.read_csv(os.path.join(config.DATA_DIR, filename))
         df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True, errors='coerce')
         df = df.dropna(subset=['timestamp'])
         df['time_sec'] = (df['timestamp'] - df['timestamp'].iloc[0]).dt.total_seconds()
@@ -121,18 +126,6 @@ def load_and_preprocess():
     y_test_enc = label_encoder.transform(y_test)
     
     return (X_train, y_train_enc), (X_test, y_test_enc), label_encoder
-
-# Add function to create idle data samples
-def create_idle_samples(num_samples=50, window_size=200, sensor_count=6):
-    """Create realistic idle/stationary samples"""
-    idle_samples = []
-    for _ in range(num_samples):
-        # Simulate device sitting on table with minimal movement
-        sample = np.random.normal(0, 0.05, (window_size, sensor_count))
-        # Add slight gravity component to accelerometer
-        sample[:, 2] += 9.8 + np.random.normal(0, 0.1, window_size)  # Z-axis gravity
-        idle_samples.append(sample)
-    return np.array(idle_samples)
 
 if __name__ == "__main__":
     (X_train, y_train), (X_test, y_test), label_encoder = load_and_preprocess()
