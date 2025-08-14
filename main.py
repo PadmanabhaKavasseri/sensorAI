@@ -1,8 +1,8 @@
-from pp import load_and_preprocess
-from dataset import GestureDataset
+from util.pp import load_and_preprocess
+from util.dataset import GestureDataset
 import torch
 from torch.utils.data import DataLoader, WeightedRandomSampler
-from enhanced_model import EnhancedGestureCNN, LSTMGestureModel, ImprovedCNNModel
+from model_defs.enhanced_model import EnhancedGestureCNN, LSTMGestureModel, ImprovedCNNModel
 import torch.nn as nn
 import torch.optim as optim
 import numpy as np
@@ -15,6 +15,33 @@ import matplotlib.pyplot as plt
 torch.manual_seed(42)
 np.random.seed(42)
 random.seed(42)
+
+class CNNLSTMModel(nn.Module):
+    def __init__(self, input_size=6, num_classes=2):
+        super().__init__()
+        self.cnn = nn.Sequential(
+            nn.Conv1d(in_channels=input_size, out_channels=32, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool1d(kernel_size=2),
+            nn.Conv1d(32, 64, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool1d(kernel_size=2),
+        )
+        self.lstm = nn.LSTM(input_size=64, hidden_size=128, batch_first=True)
+        self.classifier = nn.Sequential(
+            nn.Linear(128, 64),
+            nn.ReLU(),
+            nn.Linear(64, num_classes)
+        )
+    
+    def forward(self, x):
+        # x: (batch, seq_len, features) → (batch, features, seq_len)
+        x = x.permute(0, 2, 1)
+        x = self.cnn(x)  # (batch, channels, new_seq_len)
+        x = x.permute(0, 2, 1)  # back to (batch, seq_len, channels)
+        output, (h_n, c_n) = self.lstm(x)
+        out = self.classifier(h_n[-1])
+        return out
 
 def get_class_weights(y_train):
     """Calculate class weights for imbalanced datasets"""
@@ -165,7 +192,8 @@ def main():
     models_to_try = {
         "Enhanced CNN": EnhancedGestureCNN(input_size=6, num_classes=len(le.classes_)),
         "Improved CNN": ImprovedCNNModel(input_size=6, num_classes=len(le.classes_)),
-        "LSTM": LSTMGestureModel(input_size=6, num_classes=len(le.classes_))
+        "LSTM": LSTMGestureModel(input_size=6, num_classes=len(le.classes_)),
+        "CNN-LSTM": CNNLSTMModel(input_size=6, num_classes=len(le.classes_))
     }
     
     results = {}
@@ -190,7 +218,7 @@ def main():
         }
         
         # Save model with specific name
-        torch.save(model.state_dict(), f"{model_name.lower().replace(' ', '_')}_gesture_model.pth")
+        torch.save(model.state_dict(), f"{model_name.lower().replace(' ', '_').replace('-', '_')}_gesture_model.pth")
     
     # Print comparison
     print("\n" + "="*60)

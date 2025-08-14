@@ -1,18 +1,23 @@
+import sys
+import os
+from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
-import os
 
-# Directory containing CSV files
-data_dir = 'raw_data'
+# Adds ~/Projects/sensor_ai
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+import config
+
+
 
 # Get list of all .csv files in the raw_data directory
-files = [f for f in os.listdir(data_dir) if f.endswith('.csv')]
+files = [f for f in os.listdir(config.DATA_DIR) if f.endswith('.csv')]
 
 for filename in files:
     # Use filename without .csv as the label
     label = os.path.splitext(filename)[0]
-    df = pd.read_csv(os.path.join(data_dir, filename))
+    df = pd.read_csv(os.path.join(config.DATA_DIR, filename))
 
     # Convert timestamp strings to datetime
     df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True, errors='coerce')
