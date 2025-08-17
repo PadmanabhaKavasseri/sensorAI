@@ -1,0 +1,141 @@
+GESTURE RECOGNITION MODEL EVALUATION RESULTS
+============================================================
+
+Evaluation Date: 2025-08-16 20:08:38
+Test Data Shape: (78, 200, 6)
+Number of Classes: 2
+Classes: ['circle', 'misc']
+
+DETAILED MODEL EVALUATIONS:
+============================================================
+
+Model: gesturereccnn_v3_final_model.pth
+Architecture: gesturereccnn_v3
+Overall Accuracy: 97.44%
+Path: /Users/padmanabha/Projects/sensor_ai/results/models/gesturereccnn_v3_final_model.pth
+
+Detailed Evaluation:
+==================================================
+              precision    recall  f1-score   support
+
+      circle       0.98      0.98      0.98        55
+        misc       0.96      0.96      0.96        23
+
+    accuracy                           0.97        78
+   macro avg       0.97      0.97      0.97        78
+weighted avg       0.97      0.97      0.97        78
+
+Confusion Matrix:
+[[54  1]
+ [ 1 22]]
+
+============================================================
+
+Model: lstm_final_model.pth
+Architecture: lstm
+Overall Accuracy: 97.44%
+Path: /Users/padmanabha/Projects/sensor_ai/results/models/lstm_final_model.pth
+
+Detailed Evaluation:
+==================================================
+              precision    recall  f1-score   support
+
+      circle       0.98      0.98      0.98        55
+        misc       0.96      0.96      0.96        23
+
+    accuracy                           0.97        78
+   macro avg       0.97      0.97      0.97        78
+weighted avg       0.97      0.97      0.97        78
+
+Confusion Matrix:
+[[54  1]
+ [ 1 22]]
+
+============================================================
+
+Model: gesturereccnn_v2_final_model.pth
+Architecture: gesturereccnn_v2
+Overall Accuracy: 96.15%
+Path: /Users/padmanabha/Projects/sensor_ai/results/models/gesturereccnn_v2_final_model.pth
+
+Detailed Evaluation:
+==================================================
+              precision    recall  f1-score   support
+
+      circle       0.98      0.96      0.97        55
+        misc       0.92      0.96      0.94        23
+
+    accuracy                           0.96        78
+   macro avg       0.95      0.96      0.95        78
+weighted avg       0.96      0.96      0.96        78
+
+Confusion Matrix:
+[[53  2]
+ [ 1 22]]
+
+============================================================
+
+Model: gesturereccnn_v1_final_model.pth
+Architecture: gesturereccnn_v1
+Overall Accuracy: 96.15%
+Path: /Users/padmanabha/Projects/sensor_ai/results/models/gesturereccnn_v1_final_model.pth
+
+Detailed Evaluation:
+==================================================
+              precision    recall  f1-score   support
+
+      circle       0.96      0.98      0.97        55
+        misc       0.95      0.91      0.93        23
+
+    accuracy                           0.96        78
+   macro avg       0.96      0.95      0.95        78
+weighted avg       0.96      0.96      0.96        78
+
+Confusion Matrix:
+[[54  1]
+ [ 2 21]]
+
+============================================================
+
+Model: cnn_lstm_final_model.pth
+Architecture: cnn_lstm
+Overall Accuracy: 92.31%
+Path: /Users/padmanabha/Projects/sensor_ai/results/models/cnn_lstm_final_model.pth
+
+Detailed Evaluation:
+==================================================
+              precision    recall  f1-score   support
+
+      circle       0.96      0.93      0.94        55
+        misc       0.84      0.91      0.88        23
+
+    accuracy                           0.92        78
+   macro avg       0.90      0.92      0.91        78
+weighted avg       0.93      0.92      0.92        78
+
+Confusion Matrix:
+[[51  4]
+ [ 2 21]]
+
+============================================================
+
+MODEL COMPARISON SUMMARY:
+============================================================
+Rank  Model File                          Architecture         Accuracy  
+---------------------------------------------------------------------------
+1     gesturereccnn_v3_final_model.pth    gesturereccnn_v3     97.44     %
+2     lstm_final_model.pth                lstm                 97.44     %
+3     gesturereccnn_v2_final_model.pth    gesturereccnn_v2     96.15     %
+4     gesturereccnn_v1_final_model.pth    gesturereccnn_v1     96.15     %
+5     cnn_lstm_final_model.pth            cnn_lstm             92.31     %
+
+Best Performing Model:
+  File: gesturereccnn_v3_final_model.pth
+  Architecture: gesturereccnn_v3
+  Accuracy: 97.44%
+  Path: /Users/padmanabha/Projects/sensor_ai/results/models/gesturereccnn_v3_final_model.pth
+
+
+Evaluation Summary:
+Total Models Evaluated: 5
+Total Models Failed: 0
