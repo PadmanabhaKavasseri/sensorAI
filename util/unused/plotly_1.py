@@ -7,8 +7,8 @@ from dash.dependencies import Input, Output
 import os
 
 # Directory containing CSV file
-data_dir = 'raw_data'
-filename = 'circle_small_fast.csv'
+data_dir = '../../sensor_data/'
+filename = 'circle_fast_small_ccw_0.csv'
 file_path = os.path.join(data_dir, filename)
 
 # Check if file exists
